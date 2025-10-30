@@ -149,8 +149,8 @@ graph LR
 
 Ego vehicle wishes to join allowable (Joinable) Target vehicle or platoon ahead. Process:
 
-* [[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 8](./img/join-seq-high-level.png)
-* [[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 9](./img/join-seq-details.png)
+* [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) [Fig. 8](./img/join-seq-high-level.png)
+* [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) [Fig. 9](./img/join-seq-details.png)
 
 ```mermaid
 sequenceDiagram
@@ -450,7 +450,7 @@ sequenceDiagram
 * **Key Updates (Platoon Update):**
   * **Purpose:** Periodically (e.g., 60s) update PGK/PPK for security.
   * **Flow:** Leader initiates $\rightarrow$ Propagates backward new keys (PMM) $\rightarrow$ Tail activates first $\rightarrow$ Forward confirmation (based on receiving following's PCM with new key).
-* [Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 12 sequence diagram]
+* Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) [Fig. 12 sequence diagram](./img/platoon-update-seq.png)
 
 ```mermaid
 graph TD
@@ -477,7 +477,7 @@ graph TD
           * No **preceding** PCM $\rightarrow$ Trigger **Front Split**.
           * No **following** PCM $\rightarrow$ Trigger **Back Split**.
 * **Role:** Ensure timely, automatic safe detachment or reorganization upon communication loss.
-* [Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 13 sequence diagram]
+* Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) [Fig. 13 sequence diagram](./img/neighbour-watchdog-seq.png)
 
 ```mermaid
 graph TD
