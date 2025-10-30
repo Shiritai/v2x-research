@@ -1,8 +1,8 @@
 # Truck Platooning Technology Research and Preliminary Design of V2X Communication System Based on Autoware/Zenoh/QUIC
 
-> * *Final Version Functional specification for white-label truck.pdf*
-> * *Platooning protocol definition and communication strategy.pdf*
-> * *V2 Platooning use cases.pdf*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf)*
 
 ## 1. Introduction
 
@@ -40,49 +40,11 @@ Multiple vehicles (especially trucks) follow in close proximity and coordinated 
 
 * Decomposes complex systems into layers with distinct responsibilities to promote modularity and interoperability.
 
-<!-- ![V2 Platooning use cases.pdf Fig. 1-1](./img/C-ITS-protocol-stack-and-ensemble-protocol.png) -->
-![Final Version Functional specification for white-label truck.pdf Fig. 2](./img/ensemble-platooning-layers.png)
+<!-- ![[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) Fig. 1-1](./img/C-ITS-protocol-stack-and-ensemble-protocol.png) -->
+![[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) Fig. 2](./img/ensemble-platooning-layers.png)
 
-```mermaid
-graph TD
-    S("Services Layer") --> ST("Strategic Layer");
-    ST --> T1("Tactical Layer - Truck 1");
-    ST --> T2("Tactical Layer - Truck 2");
-    ST --> T3("Tactical Layer - Truck N");
-    T1 <--> T2;
-    T1 --> O1("Operational Layer - Truck 1");
-    T2 --> O2("Operational Layer - Truck 2");
-    T3 --> O3("Operational Layer - Truck N");
-
-    subgraph "Cloud/Backend"
-        S
-        ST
-    end
-
-    subgraph "Vehicle Side (V2V Interaction)"
-        T1
-        T2
-        T3
-    end
-
-    subgraph "Vehicle Side (Vehicle Control)"
-        O1
-        O2
-        O3
-    end
-
-    style S fill:#f9f,stroke:#333,stroke-width:2px
-    style ST fill:#ccf,stroke:#333,stroke-width:2px
-    style T1 fill:#9cf,stroke:#333,stroke-width:2px
-    style T2 fill:#9cf,stroke:#333,stroke-width:2px
-    style T3 fill:#9cf,stroke:#333,stroke-width:2px
-    style O1 fill:#9fc,stroke:#333,stroke-width:2px
-    style O2 fill:#9fc,stroke:#333,stroke-width:2px
-    style O3 fill:#9fc,stroke:#333,stroke-width:2px
-```
-
-> * *Final Version Functional specification for white-label truck.pdf (Page 15-16, Fig. 2)*
-> * *V2 Platooning use cases.pdf (Page 13, Fig. 1-1)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 15-16, Fig. 2)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 13, Fig. 1-1)*
 
 ### 2.2 Layer Responsibilities
 
@@ -93,8 +55,8 @@ graph TD
 | **Tactical Layer** | Platoon Coordination (Formation/Dissolution/Condensation/Gap) | Executes interaction protocols via V2V to coordinate platoon operations. |
 | **Operational Layer** | Vehicle Actuator Control (Acceleration/Deceleration/Steering) | Performs specific driving operations to maintain speed/gap and ensure stability. |
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 15-16)*
-> * *V2 Platooning use cases.pdf (Page 13-14)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 15-16)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 13-14)*
 
 ### 2.3 Platooning Levels Overview (PSF vs PAF)
 
@@ -117,8 +79,8 @@ graph TD
     PAF --> PAF_Gap["Time Gap: <0.5s (No Human Reaction Time Needed)"];
 ```
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 8-9, 111)*
-> * *V2 Platooning use cases.pdf (Page 9, 16-17, Table 2-1)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 8-9, 111)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 9, 16-17, Table 2-1)*
 
 ## 3. Platooning Support Function (PSF): Driver Assistance
 
@@ -131,8 +93,8 @@ graph TD
   * Driver must select safe following distance and **continuously monitor** system and environment.
   * System provides **assistance** only; driver is ultimate fallback.
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 9, 18, 20)*
-> * *V2 Platooning use cases.pdf (Page 9, 16, 18)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 9, 18, 20)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 9, 16, 18)*
 
 ### 3.2 Key Features: Time Gap and Control Limits
 
@@ -153,8 +115,8 @@ graph TD
 | Longitudinal Control | Assistance with Limits (e.g., Decel $\le 3.5 m/s^2$) | Driver Comfort/Controllability |
 | Lateral Control  | Driver Responsible (Optional Assistance) | Driver Responsibility       |
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 9, 47-48, PSF_Long_Control_001, PSF_Long_Control_005)*
-> * *V2 Platooning use cases.pdf (Page 9, 17, 18)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 9, 47-48, PSF_Long_Control_001, PSF_Long_Control_005)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 9, 17, 18)*
 
 ### 3.3 V2V Benefits: Enhanced Safety and Efficiency
 
@@ -180,15 +142,15 @@ graph LR
     G --> H("Earlier Warning / Faster Response<br> / Smoother Control");
 ```
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 20, 26-29, Table 3, 48)*
-> * *Platooning protocol definition and communication strategy.pdf (Page 31, 81-83)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 20, 26-29, Table 3, 48)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 31, 81-83)*
 
 ### 3.4 Use Case: Joining Platoon from Behind
 
 Ego vehicle wishes to join allowable (Joinable) Target vehicle or platoon ahead. Process:
 
-* [Platooning protocol definition and communication strategy.pdf Fig. 8](./img/join-seq-high-level.png)
-* [Platooning protocol definition and communication strategy.pdf Fig. 9](./img/join-seq-details.png)
+* [[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 8](./img/join-seq-high-level.png)
+* [[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 9](./img/join-seq-details.png)
 
 ```mermaid
 sequenceDiagram
@@ -209,8 +171,8 @@ sequenceDiagram
   * V2V (CAM) for opportunity discovery
   * V2V (PCM) for stable driving. Driver monitors throughout
 
-> * *V2 Platooning use cases.pdf (Page 33-35, PSF_2.1)*
-> * *Platooning protocol definition and communication strategy.pdf (Page 32-37, Fig. 8, Fig. 9)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 33-35, PSF_2.1)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 32-37, Fig. 8, Fig. 9)*
 
 ### 3.5 Human-Machine Interface (HMI) Focus
 
@@ -227,7 +189,7 @@ sequenceDiagram
   * Adjust Target Gap (if available)
   * **Override Anytime** (Brake/Steer)
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 36-45, Appendix B)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 36-45, Appendix B)*
 
 ## 4. Platooning Autonomous Function (PAF): Toward Automation
 
@@ -241,8 +203,8 @@ sequenceDiagram
   
 ![alt text](./img/PAF-intro.png)
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 9, 58-59, Fig. 7)*
-> * *V2 Platooning use cases.pdf (Page 9, 16-17, 67-68, Table 5-4)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 9, 58-59, Fig. 7)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 9, 16-17, 67-68, Table 5-4)*
 
 ### 4.2 Key Features: Small Gaps and Follow-me
 
@@ -260,8 +222,8 @@ sequenceDiagram
 | Follow Mode      | Follow-me / Auto-follow          | System Autonomously Tracks Lead Path |
 | Driver Responsibility (Following) | System                           | Automation Core                     |
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 9, 59, 86-87, Table 13)*
-> * *V2 Platooning use cases.pdf (Page 17, 69)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 9, 59, 86-87, Table 13)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 17, 69)*
 
 ### 4.3 Comparison with SAE L4 Autonomous Driving - SAE L4 Overview
 
@@ -282,7 +244,7 @@ graph TD
     L4 --> L4_NoMonitor("No Monitoring in ODD");
 ```
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 59, 67-69)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 59, 67-69)*
 > * *SAE J3016 standard*
 
 ### 4.4 PAF Following Truck vs. Independent L4 Truck - PAF vs L4
@@ -304,7 +266,7 @@ graph TD
 
 * **Positioning:** PAF can be viewed as a specific application form between L2/L3 (assistance/conditional automation) and L4 (high automation).
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 59, 69-73, Table 8, Table 9)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 59, 69-73, Table 8, Table 9)*
 
 ### 4.5 Key Technical Challenges (1/2): Brake Performance Estimation (BPE)
 
@@ -329,7 +291,7 @@ graph TD
 * Challenges: Many factors hard to measure instantly/accurately (especially road friction).
 * Directions: Sensor fusion, physical models, V2X information sharing.
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 77, 79-88, Table 11, Table 13)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 77, 79-88, Table 11, Table 13)*
 
 ### 4.6 Key Technical Challenges (2/2): Perception, Fault Tolerance, Infrastructure
 
@@ -347,8 +309,8 @@ graph TD
 
 ![alt text](./img/infrastructure-support.png)
 
-> * *Final Version Functional specification for white-label truck.pdf (Page 58, 71, 93-97, 108, 110, Fig. 15, 142-144)*
-> * *V2 Platooning use cases.pdf (Page 71-74, 137, 142-145)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 58, 71, 93-97, 108, 110, Fig. 15, 142-144)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 71-74, 137, 142-145)*
 
 ### 4.7 Operational Design Domain (ODD) and Complex Use Cases
 
@@ -369,8 +331,8 @@ graph TD
 | Toll Station     | Driver Operation     | Enable "Lateral Following" Mode       |
 | Communication Interrupt/Fault | Driver Takeover/Increase Gap | System Autonomously Assess and Enter "Safe State" |
 
-> * *V2 Platooning use cases.pdf (Page 69-74, 77-131)*
-> * *Final Version Functional specification for white-label truck.pdf (Page 58, 73, 110)*
+> * *[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf) (Page 69-74, 77-131)*
+> * *[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf) (Page 58, 73, 110)*
 
 ## 5. ENSEMBLE V2X Communication Protocol
 
@@ -399,7 +361,7 @@ graph TD
     PU --> PU_Data("New PGK, New PPK, PlatoonID, New Position...");
 ```
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 32, 37, 41, 84-85)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 32, 37, 41, 84-85)*
 
 ### 5.2 Core Message Types: PCM (Control)
 
@@ -426,7 +388,7 @@ graph TD
     SS --> SS_Data("Front/Back Split Status & Requests");
 ```
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 32, 81-84)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 32, 81-84)*
 
 ### 5.3 Communication Flow: Joining Platoon
 
@@ -454,7 +416,7 @@ sequenceDiagram
 
 * **Key Steps:** CAM discovery $\rightarrow$ PMM request/response $\rightarrow$ Key exchange $\rightarrow$ PCM starts.
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 32-37, Fig. 8, Fig. 9)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 32-37, Fig. 8, Fig. 9)*
 
 ### 5.4 Communication Flow: Leaving/Splitting
 
@@ -475,7 +437,7 @@ sequenceDiagram
 | :----------------------------------: | :----------------------------------: |
 | ![Fig. 10](./img/back-split-seq.png) | ![Fig. 9](./img/front-split-seq.png) |
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 38-41, Fig. 10, Fig. 11, 83)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 38-41, Fig. 10, Fig. 11, 83)*
 
 ### 5.5 Security Mechanisms: Signing, Encryption, Key Updates
 
@@ -488,7 +450,7 @@ sequenceDiagram
 * **Key Updates (Platoon Update):**
   * **Purpose:** Periodically (e.g., 60s) update PGK/PPK for security.
   * **Flow:** Leader initiates $\rightarrow$ Propagates backward new keys (PMM) $\rightarrow$ Tail activates first $\rightarrow$ Forward confirmation (based on receiving following's PCM with new key).
-* [Refer to Platooning protocol definition and communication strategy.pdf Fig. 12 sequence diagram]
+* [Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 12 sequence diagram]
 
 ```mermaid
 graph TD
@@ -503,7 +465,7 @@ graph TD
     KU --> KU_Flow("Leader Initiate -> Backward Prop -> Tail Activate -> Forward Confirm");
 ```
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 18, 30, 33, 41-44, Fig. 12)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 18, 30, 33, 41-44, Fig. 12)*
 > * *ENSEMBLE D2.9 - Security Framework of Platooning*
 
 ### 5.6 Reliability Mechanism: Neighbor Watchdog
@@ -515,7 +477,7 @@ graph TD
           * No **preceding** PCM $\rightarrow$ Trigger **Front Split**.
           * No **following** PCM $\rightarrow$ Trigger **Back Split**.
 * **Role:** Ensure timely, automatic safe detachment or reorganization upon communication loss.
-* [Refer to Platooning protocol definition and communication strategy.pdf Fig. 13 sequence diagram]
+* [Refer to [Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) Fig. 13 sequence diagram]
 
 ```mermaid
 graph TD
@@ -527,11 +489,11 @@ graph TD
     BS --> Res2(Disconnect Following);
 ```
 
-> * *Platooning protocol definition and communication strategy.pdf (Page 45-46, Fig. 13)*
+> * *[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf) (Page 45-46, Fig. 13)*
 
 ## 6. Future Outlook
 
-### 6.1 Overall Architecture Concept
+<!-- ### 6.1 Overall Architecture Concept
 
 * **Objective:** Leverage open-source tools to implement ENSEMBLE V2X communication concepts.
 * **Role Allocation:**
@@ -681,7 +643,7 @@ graph LR
   
   *Source: Synthesis of all prior discussions.*
 
-### 6.7 Subsequent Design Tasks
+### 6.7 Subsequent Design Tasks -->
 
 * **Refine Zenoh Architecture:**
   * Finalize Topics structure.
@@ -700,9 +662,9 @@ graph LR
 
 ## 7. References
 
-* ENSEMBLE Project Deliverable D2.3 (Jan 2022). *V2 Platooning use cases, scenario definition and Platooning Levels*. [V2 Platooning use cases.pdf]
-* ENSEMBLE Project Deliverable D2.5 (Jan 2022). *Final Version Functional specification for white-label truck*. [Final Version Functional specification for white-label truck.pdf]
-* ENSEMBLE Project Deliverable D2.8 (Mar 2022). *Platooning protocol definition and communication strategy*. [Platooning protocol definition and communication strategy.pdf]
+* ENSEMBLE Project Deliverable D2.3 (Jan 2022). *V2 Platooning use cases, scenario definition and Platooning Levels*. [[V2 Platooning use cases.pdf](./ref/V2%20Platooning%20use%20cases.pdf)]
+* ENSEMBLE Project Deliverable D2.5 (Jan 2022). *Final Version Functional specification for white-label truck*. [[Final Version Functional specification for white-label truck.pdf](./ref/Final%20Version%20Functional%20specification%20for%20white-label%20truck.pdf)]
+* ENSEMBLE Project Deliverable D2.8 (Mar 2022). *Platooning protocol definition and communication strategy*. [[Platooning protocol definition and communication strategy.pdf](./ref/Platooning%20protocol%20definition%20and%20communication%20strategy.pdf)]
 * ENSEMBLE Project Deliverable D2.9 (Jan 2022). *Security framework of platooning*. (Not provided, but cited multiple times in D2.8)
 * SAE J3016 (Apr 2021). *Taxonomy and Definitions for Terms Related to Driving Automation Systems for On-Road Motor Vehicles*.
 * Zenoh Website: <https://zenoh.io/>
