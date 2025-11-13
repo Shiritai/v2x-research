@@ -4,11 +4,11 @@
 
 Parallel Discrete Event Simulation (PDES) aims to accelerate large-scale Discrete Event Simulation (DES) on parallel computers. Its core challenge is to find a balance between leveraging the "speed" of parallel processing and maintaining the inherent "causal order" of DES. This report aims to **delve deeply** into the core theories and cutting-edge practices of PDES.
 
-We will begin by examining the bottleneck of traditional sequential simulation—the "global synchronization barrier"—and analyze the operational philosophies and key mechanisms of the two foundational algorithms in the PDES field: "Conservative" and "Optimistic." Next, we will draw a cross-domain analogy between PDES and Database Management Systems (DBMS) to precisely clarify the ideological convergence and mechanistic differences between "Optimistic Concurrency Control" (OCC) and Time Warp.
+We will begin by examining the bottleneck of traditional sequential simulation—the "global synchronization barrier"—and analyze the operational philosophies and key mechanisms of the two foundational algorithms in the PDES field: "Conservative" and "Optimistic". Next, we will draw a cross-domain analogy between PDES and Database Management Systems (DBMS) to precisely clarify the ideological convergence and mechanistic differences between "Optimistic Concurrency Control" (OCC) and Time Warp.
 
-The report's focus will then shift to the frontiers of PDES: "adaptive synchronization" and "co-simulation." We will analyze why any single strategy has its limitations and explore how systems can achieve dynamic policy switching. Finally, we will use the co-simulation of `ns-3` and `QEMU` as a case study to analyze how State-of-the-Art (SoA) implementations (like `SimBricks`) achieve success in engineering practice through **efficient pairwise synchronization mechanisms**. We will conclude by summarizing the new software and hardware challenges this field faces in the upcoming era of large-scale system simulation.
+The report's focus will then shift to the frontiers of PDES: "adaptive synchronization" and "co-simulation". We will analyze why any single strategy has its limitations and explore how systems can achieve dynamic policy switching. Finally, we will use the co-simulation of `ns-3` and `QEMU` as a case study to analyze how State-of-the-Art (SoA) implementations (like `SimBricks`) achieve success in engineering practice through **efficient pairwise synchronization mechanisms**. We will conclude by summarizing the new software and hardware challenges this field faces in the upcoming era of large-scale system simulation.
 
-## Part 1: The Origin of the Problem — Why PDES?
+## 1 The Origin of the Problem — Why PDES?
 
 ### 1.1 The Bottleneck of Traditional Sequential Simulation: The Global Synchronization Barrier
 
@@ -18,7 +18,7 @@ Traditional Discrete Event Simulation (DES) architecture relies on a "Centralize
 2. A central scheduler continuously extracts the event with the **minimum** timestamp ($T_{\min}$).
 3. The scheduler executes this event, advancing the global virtual time to $T_{\min}$.
 
-The advantage of this method is absolute "causal correctness." However, its performance bottleneck is significant: the **Global Synchronization Barrier**.
+The advantage of this method is absolute "causal correctness". However, its performance bottleneck is significant: the **Global Synchronization Barrier**.
 
 The root of this bottleneck is not the data structure (queue access contention) but its **time-advancement rule**. Even on a parallel computer with 1000 cores, this model forces all cores to focus on the same "present moment"—namely, $T_{\min}$. If LP-A (on core 1) wants to process an event at T=100, it must wait for LP-B (on core 2) to finish processing an event at T=5.
 
@@ -35,13 +35,13 @@ The foundational work in the PDES field comes from a renowned survey paper publi
     2. **Optimistic**: Algorithms that "detect and recover from" these errors.
 * **Academic Impact**: This "avoid errors vs. fix errors" dichotomy established the research landscape for PDES for decades to come and remains the fundamental classification in all PDES textbooks and research today.
 
-## Part 2: Conservative Algorithms: Two Foundational Paths
+## 2 Conservative Algorithms: Two Foundational Paths
 
-The philosophy of conservative PDES algorithms is to "ensure correctness before proceeding," which means they must be 100% certain that an event's causal relationship is correct before executing it. This introduces the challenge of "deadlock." If a Logical Process (LP) is waiting for messages from multiple input channels, and one of those channels has no messages temporarily, the LP will wait indefinitely, eventually causing the entire system to halt.
+The philosophy of conservative PDES algorithms is to "ensure correctness before proceeding," which means they must be 100% certain that an event's causal relationship is correct before executing it. This introduces the challenge of "deadlock". If a Logical Process (LP) is waiting for messages from multiple input channels, and one of those channels has no messages temporarily, the LP will wait indefinitely, eventually causing the entire system to halt.
 
 Chandy and Misra, through two key papers, provided two diametrically opposed solutions to this problem:
 
-### 1. Path A: Deadlock Avoidance - 1979 Paper
+### 2.1 Deadlock Avoidance - 1979 Paper
 
 * **Paper**: [Chandy, K. M., & Misra, J. (1979). Distributed simulation: A case study in design and verification of distributed programs. *IEEE Transactions on Software Engineering*, SE-5(5), 440-452.](https://ieeexplore.ieee.org/document/1702653/)
 
@@ -52,17 +52,17 @@ Chandy and Misra, through two key papers, provided two diametrically opposed sol
 * **Mechanism Analysis:**
     This is the foundational work for the "Deadlock Avoidance" strategy. Its core mechanism is the use of "Null Messages."
 
-    In the simulation, a node (LP) must wait for messages from all its input channels to safely process the next event. If a particular channel has no "real" event messages for a long time, the system will deadlock. The Chandy-Misra algorithm solves this by sending "Null Messages." A null message carries a timestamp (say, $T_{null}$) and makes a promise to the receiver: "I will not send any message on this channel with a timestamp less than $T_{null}$." This allows the receiver to advance its "channel clock" and safely process events from other channels, thereby *avoiding* the occurrence of deadlock.
+    In the simulation, a node (LP) must wait for messages from all its input channels to safely process the next event. If a particular channel has no "real" event messages for a long time, the system will deadlock. The Chandy-Misra algorithm solves this by sending "Null Messages". A null message carries a timestamp (say, $T_{null}$) and makes a promise to the receiver: "I will not send any message on this channel with a timestamp less than $T_{null}$". This allows the receiver to advance its "channel clock" and safely process events from other channels, thereby *avoiding* the occurrence of deadlock.
 
     Although this method was proven to be correct and deadlock-free, in certain topologies (especially those with feedback loops), it can lead to "flooding the system with null messages," generating significant, unnecessary message overhead.
 
-### 2. Path B: Deadlock Detection and Recovery - 1981 Paper
+### 2.2 Deadlock Detection and Recovery - 1981 Paper
 
 * **Paper**: [Chandy, K. M., & Misra, J. (1981). Asynchronous distributed simulation via a sequence of parallel computations. *Communications of the ACM*, 24(4), 198-205.](https://dl.acm.org/doi/10.1145/358598.358613)
 
 * **Link**: [https://dl.acm.org/doi/10.1145/358598.358613](https://dl.acm.org/doi/10.1145/358598.358613)
 
-* **Abstract**: "An approach to carrying out asynchronous, distributed simulation on multiprocessor message- passing architectures is presented. This scheme differs from other distributed simulation schemes because (1) the amount of memory required by all processors together is bounded and is no more than the amount required in sequential simulation and (2) the multiprocessor network is allowed to deadlock, the deadlock is detected, and then the deadlock is broken. Proofs for the correctness of this approach are outlined."
+* **Abstract**: "An approach to carrying out asynchronous, distributed simulation on multiprocessor message-passing architectures is presented. This scheme differs from other distributed simulation schemes because (1) the amount of memory required by all processors together is bounded and is no more than the amount required in sequential simulation and (2) the multiprocessor network is allowed to deadlock, the deadlock is detected, and then the deadlock is broken. Proofs for the correctness of this approach are outlined."
 
 * **Theoretical Explanation:**
     This is the foundational work for the "Deadlock Detection and Recovery" strategy. As an alternative to the 1979 paper, this algorithm *allows* the system to enter a deadlocked state. It divides the simulation into two phases:
@@ -74,13 +74,13 @@ Chandy and Misra, through two key papers, provided two diametrically opposed sol
 
     These two papers together form the complete theoretical basis for conservative PDES algorithms.
 
-## Part 3: Foundational Algorithm (II): Optimistic
+## 3 Foundational Algorithm (II): Optimistic
 
 ### 3.1 The Optimistic Philosophy: Act First, Correct Errors Later
 
 Optimistic algorithms adopt the exact opposite philosophy. Their core principle is **Detect & Recover**.
 
-* **Execution Rule**: Employs "Speculative Execution." An LP **never waits**. It always immediately processes the earliest event in its local queue, optimistically assuming that "no late messages will arrive."
+* **Execution Rule**: Employs "Speculative Execution". An LP **never waits**. It always immediately processes the earliest event in its local queue, optimistically assuming that "no late messages will arrive."
 * **Causality Error**: When LP-A (LVT=16) optimistically finishes an event at T=15, it suddenly receives a "straggler message" from LP-B with a timestamp of T=12. This constitutes a causality error.
 * **Recovery Mechanism**: LP-A must initiate a recovery mechanism, namely, "Rollback."
 
@@ -133,13 +133,13 @@ Jefferson's (1985) paper fully defined all the mechanisms required for Time Warp
     * **Use 1 - Memory Management**: State snapshots before the GVT can be safely discarded (known as "Fossil Collection") to free up memory.
     * **Use 2 - Commit**: Operations (like I/O) before the GVT are "irreversible" and can be safely committed to the outside world.
 
-## Part 4: Cross-Domain "Convergent Evolution": PDES vs. DBMS
+## 4 Cross-Domain "Convergent Evolution": PDES vs. DBMS
 
 ### 4.1 Philosophical Convergence
 
 The two philosophies of PDES do not exist in isolation. In the "Concurrency Control" field of Database Management Systems (DBMS), **highly similar** ideas also evolved.
 
-This phenomenon can be seen as "Convergent Evolution." PDES and DBMS face the same abstract problem: how to maintain consistency in a parallel environment.
+This phenomenon can be seen as "Convergent Evolution". PDES and DBMS face the same abstract problem: how to maintain consistency in a parallel environment.
 
 * **PDES Problem**: How to ensure the final result is equivalent to some "sequential" (causally correct) execution when multiple LPs run in parallel?
 * **DBMS Problem**: How to ensure the final result is equivalent to some "sequential" (Serializable) execution when multiple Transactions run in parallel?
@@ -169,7 +169,7 @@ Although the philosophy (optimism) is similar, the trigger mechanisms for Time W
 
 #### **Time Warp (PDES)**: **Passively Triggered**
 
-This "convergent evolution" even developed into "direct borrowing." Jefferson himself once applied the Time Warp algorithm directly to the database domain.
+This "convergent evolution" even developed into "direct borrowing". Jefferson himself once applied the Time Warp algorithm directly to the database domain.
 
 * **Paper**: [Jefferson, D., & Motro, A. (1986). **The Time Warp mechanism for database concurrency control**. *Proceedings of the Second International Conference on Data Engineering (ICDE '86)*, 474-481.](https://ieeexplore.ieee.org/document/7266254/)
 * **Link**: [https://ieeexplore.ieee.org/document/7266254/](https://ieeexplore.ieee.org/document/7266254/)
@@ -186,7 +186,7 @@ This "convergent evolution" even developed into "direct borrowing." Jefferson hi
 * **Validation Failure $\to$ Abort**. All of T1's local work is discarded, and it retries from the beginning.
 * OCC's strategy can be compared to "isolate first, review later": complete all work locally (in isolation), actively validate before committing (review), and only publish to the global state if validation passes.
 
-## Part 5: PDES Frontiers: Adaptive Synchronization and Co-simulation
+## 5 PDES Frontiers: Adaptive Synchronization and Co-simulation
 
 ### 5.1 From Static to Dynamic: The Limitations of a Single Strategy
 
@@ -197,7 +197,7 @@ Long-term exploration in the PDES field has **generally shown** that **no single
 
 **The prevailing view**: **No single static strategy exists** that performs best for all models and all execution phases.
 
-**The Frontier**: "Adaptive Synchronization." The system should be able to dynamically monitor the simulation state at runtime (e.g., rollback rate, LVT progression) and switch between conservative and optimistic modes, or even use different strategies on different LPs.
+**The Frontier**: "Adaptive Synchronization". The system should be able to dynamically monitor the simulation state at runtime (e.g., rollback rate, LVT progression) and switch between conservative and optimistic modes, or even use different strategies on different LPs.
 
 ### 5.2 The Challenge of Modern Co-simulation: The Case of `ns-3` and `QEMU`
 
