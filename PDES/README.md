@@ -8,7 +8,7 @@ We will begin by examining the bottleneck of traditional sequential simulation�
 
 The report's focus will then shift to the frontiers of PDES: "adaptive synchronization" and "co-simulation". We will analyze why any single strategy has its limitations and explore how systems can achieve dynamic policy switching. Finally, we will use the co-simulation of `ns-3` and `QEMU` as a case study to analyze how State-of-the-Art (SoA) implementations (like `SimBricks`) achieve success in engineering practice through **efficient pairwise synchronization mechanisms**. We will conclude by summarizing the new software and hardware challenges this field faces in the upcoming era of large-scale system simulation.
 
-## 1 The Origin of the Problem — Why PDES?
+## 1. The Origin of the Problem — Why PDES?
 
 ### 1.1 The Bottleneck of Traditional Sequential Simulation: The Global Synchronization Barrier
 
@@ -35,7 +35,7 @@ The foundational work in the PDES field comes from a renowned survey paper publi
     2. **Optimistic**: Algorithms that "detect and recover from" these errors.
 * **Academic Impact**: This "avoid errors vs. fix errors" dichotomy established the research landscape for PDES for decades to come and remains the fundamental classification in all PDES textbooks and research today.
 
-## 2 Conservative Algorithms: Two Foundational Paths
+## 2. Conservative Algorithms: Two Foundational Paths
 
 The philosophy of conservative PDES algorithms is to "ensure correctness before proceeding," which means they must be 100% certain that an event's causal relationship is correct before executing it. This introduces the challenge of "deadlock". If a Logical Process (LP) is waiting for messages from multiple input channels, and one of those channels has no messages temporarily, the LP will wait indefinitely, eventually causing the entire system to halt.
 
@@ -74,7 +74,7 @@ Chandy and Misra, through two key papers, provided two diametrically opposed sol
 
     These two papers together form the complete theoretical basis for conservative PDES algorithms.
 
-## 3 Foundational Algorithm (II): Optimistic
+## 3. Optimistic Algorithm
 
 ### 3.1 The Optimistic Philosophy: Act First, Correct Errors Later
 
@@ -133,7 +133,7 @@ Jefferson's (1985) paper fully defined all the mechanisms required for Time Warp
     * **Use 1 - Memory Management**: State snapshots before the GVT can be safely discarded (known as "Fossil Collection") to free up memory.
     * **Use 2 - Commit**: Operations (like I/O) before the GVT are "irreversible" and can be safely committed to the outside world.
 
-## 4 Cross-Domain "Convergent Evolution": PDES vs. DBMS
+## 4. Cross-Domain "Convergent Evolution": PDES vs. DBMS
 
 ### 4.1 Philosophical Convergence
 
@@ -186,7 +186,7 @@ This "convergent evolution" even developed into "direct borrowing". Jefferson hi
 * **Validation Failure $\to$ Abort**. All of T1's local work is discarded, and it retries from the beginning.
 * OCC's strategy can be compared to "isolate first, review later": complete all work locally (in isolation), actively validate before committing (review), and only publish to the global state if validation passes.
 
-## 5 PDES Frontiers: Adaptive Synchronization and Co-simulation
+## 5. PDES Frontiers: Adaptive Synchronization and Co-simulation
 
 ### 5.1 From Static to Dynamic: The Limitations of a Single Strategy
 
